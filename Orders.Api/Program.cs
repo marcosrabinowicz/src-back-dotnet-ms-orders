@@ -51,4 +51,4 @@ app.MapDelete("/orders/{id:guid}", async (Guid id, IOrdersRepository repo) =>
 
 app.Run();
 
-public partial class Program { } // p/ WebApplicationFactory nos testes
+public partial class Program { }

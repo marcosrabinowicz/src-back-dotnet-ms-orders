@@ -22,5 +22,22 @@ public class ApiIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
         get.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
     }
 
+    [Fact]
+    public async Task Post_Should_Return_BadRequest_When_Request_Is_Invalid()
+    {
+        // Arrange — requisição sem itens (inválida)
+        var invalidReq = new CreateOrderRequest("C1", []);
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/orders", invalidReq);
+
+        // Assert
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+
+        // (Opcional) checar a mensagem de erro retornada
+        var content = await response.Content.ReadAsStringAsync();
+        content.Should().Contain("Items required");
+    }
+
     private sealed record OrderResponse(Guid Id, string CustomerId, DateTime CreatedAt, decimal Total);
 }
